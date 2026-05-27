@@ -29,4 +29,20 @@ func quickLookImage(at path: String) {
     process.launch()
 }
 
+var stepCount = 1
+func mark(printting: String, blankRow: Int){
+    let blankString = String(repeating: "\n", count: blankRow)
+    print("\(blankString)\u{001B}[33m---------- \(stepCount). \(printting) ----------\u{001B}[0m")
+    stepCount += 1
+}
+
+
+func clearScreen() {
+    let process = Process()
+    process.launchPath = "/usr/bin/clear"   // clear 命令的路径
+    process.arguments = []                  // 无需参数
+    process.launch()
+    process.waitUntilExit()
+}
+
 

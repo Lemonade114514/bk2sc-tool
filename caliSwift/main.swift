@@ -1,9 +1,10 @@
 import Foundation
 
 resizeTerminal(rows: 60, cols: 75)
+clearScreen()
 
 // MARK: - 1. find folder
-print("\n\n---------- scanning ----------")
+mark(printting: "scanning", blankRow: 2)
 let keywords = ["4958A.csv",
                 "4989A.csv"]
 let urls = findCsvInFolder(keywords: keywords)
@@ -15,7 +16,7 @@ var rawData = [String: [String]]()
 var dataSets = [String: Dictionary<String, Any>]()
 for (index,url) in urls.enumerated(){
     let fileName = url.path.components(separatedBy: "/").last ?? ""
-    print("\n---------- reading data \(index+1)/\(urls.count): \(fileName) ----------")
+    mark(printting: "reading data \(index+1)/\(urls.count): \(fileName)", blankRow: 1)
     let raw = csvReader(url: url)
     rawData[fileName] = raw
     
@@ -27,12 +28,12 @@ for (index,url) in urls.enumerated(){
 
 
 // MARK: - 4. make saving file/data
-print("\n\n---------- exporting ----------")
+mark(printting: "exporting", blankRow: 2)
 var exportCount = 1
 if let folder = mkdirOnDesktop("Calibration") {
     print("Output Folder：\(folder.path)")
     
-    for (micType, dataset) in dataSets{
+    for (_, dataset) in dataSets{
         for data in dataset{
             let saveAxis_ = dataset["axis"] as! String
             let saveAxis = saveAxis_.replacingOccurrences(of: ",", with: "\t")
@@ -52,6 +53,6 @@ if let folder = mkdirOnDesktop("Calibration") {
         }
     }
 }
-print("\n\n---------- complete ----------")
+mark(printting: "complete", blankRow: 2)
 let elapsed = Date().timeIntervalSince(start)
 print(String(format: "⏱ 总耗时：\u{001B}[1;31m%.3f\u{001B}[0m 秒", elapsed))
